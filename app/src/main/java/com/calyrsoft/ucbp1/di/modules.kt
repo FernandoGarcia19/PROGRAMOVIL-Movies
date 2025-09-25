@@ -1,5 +1,12 @@
 package com.calyrsoft.ucbp1.di
 
+import com.calyrsoft.ucbp1.features.dollar.data.database.AppRoomDatabase
+import com.calyrsoft.ucbp1.features.dollar.data.datasource.DollarLocalDataSource
+import com.calyrsoft.ucbp1.features.dollar.data.datasource.RealTimeRemoteDataSource
+import com.calyrsoft.ucbp1.features.dollar.data.repository.DollarRepository
+import com.calyrsoft.ucbp1.features.dollar.domain.repository.IDollarRepository
+import com.calyrsoft.ucbp1.features.dollar.domain.usecase.FetchDollarUseCase
+import com.calyrsoft.ucbp1.features.dollar.presentation.DollarViewModel
 import com.calyrsoft.ucbp1.features.github.data.api.GithubSerivce
 import com.calyrsoft.ucbp1.features.github.data.datasource.GithubRemoteDataSource
 import com.calyrsoft.ucbp1.features.github.data.repository.GithubRepository
@@ -19,6 +26,7 @@ import com.calyrsoft.ucbp1.features.movies.presentation.MoviesViewModel
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -32,15 +40,32 @@ val appModule = module {
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
     }
-    single {
+    single(named("themoviedb")) {
         Retrofit.Builder()
             .baseUrl("https://api.themoviedb.org")
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
+    single(named("github")) {
+        Retrofit.Builder()
+            .baseUrl("https://api.github.com")
+            .client(get())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    single(named("postsapi")) {
+        Retrofit.Builder()
+            .baseUrl("http://jsonplaceholder.typicode.com")
+            .client(get())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
     single<MoviesService>{
-        get<Retrofit>().create(MoviesService::class.java)
+        get<Retrofit>(named("themoviedb")).create(MoviesService::class.java)
     }
     single{ ThemoviedbDataSource(get()) }
     single<IMoviesRepository>{ MoviesRepository(get()) }
@@ -48,7 +73,7 @@ val appModule = module {
     viewModel { MoviesViewModel(get()) }
 
     single<GithubSerivce> {
-        get<Retrofit>().create(GithubSerivce::class.java)
+        get<Retrofit>(named("github")).create(GithubSerivce::class.java)
     }
     single{ GithubRemoteDataSource(get()) }
     single<IGithubRepository>{ GithubRepository(get()) }
@@ -58,5 +83,13 @@ val appModule = module {
     single<ILoginRepository>{LoginRepository()}
     factory { LoginUsecase(get()) }
     viewModel { LoginViewModel(get()) }
+
+    single { AppRoomDatabase.getDatabase(get()) }
+    single { get<AppRoomDatabase>().dollarDao() }
+    single{ RealTimeRemoteDataSource() }
+    single { DollarLocalDataSource(get()) }
+    single<IDollarRepository>{ DollarRepository(get(), get()) }
+    factory{ FetchDollarUseCase(get()) }
+    viewModel { DollarViewModel(get()) }
 
 }
