@@ -10,6 +10,7 @@ import com.calyrsoft.ucbp1.features.dollar.presentation.DollarScreen
 import com.calyrsoft.ucbp1.features.github.presentation.GithubScreen
 import com.calyrsoft.ucbp1.features.login.presentation.LoginScreen
 import com.calyrsoft.ucbp1.features.movies.presentation.MoviesScreen
+import com.calyrsoft.ucbp1.features.profile.presentation.ProfileScreen
 
 @Composable
 fun AppNavigation() {
@@ -27,6 +28,9 @@ fun AppNavigation() {
         }
         composable(Screen.Movies.route) {
             MoviesScreen(modifier = Modifier)
+        }
+        composable(Screen.Profile.route) {
+            ProfileScreen(modifier = Modifier)
         }
         composable(Screen.Dollar.route) {
             DollarScreen()

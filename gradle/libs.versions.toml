@@ -14,6 +14,7 @@ espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.9.2"
 activityCompose = "1.10.1"
 composeBom = "2024.09.00"
+mockitoCoreVersion = "5.20.0"
 retrofit = "3.0.0"
 navcompose = "2.9.3"
 retrofitVersion = "2.9.0"
@@ -45,6 +46,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
 koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koinAndroidxNavigation" }
+mockito-mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCoreVersion" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navcompose"}
 retrofit-v290 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }

@@ -24,6 +24,10 @@ import com.calyrsoft.ucbp1.features.movies.data.repository.MoviesRepository
 import com.calyrsoft.ucbp1.features.movies.domain.repository.IMoviesRepository
 import com.calyrsoft.ucbp1.features.movies.domain.usecase.FetchMoviesUseCase
 import com.calyrsoft.ucbp1.features.movies.presentation.MoviesViewModel
+import com.calyrsoft.ucbp1.features.profile.data.repository.ProfileRepository
+import com.calyrsoft.ucbp1.features.profile.domain.repository.IProfileRepository
+import com.calyrsoft.ucbp1.features.profile.domain.usecase.loadProfileUseCase
+import com.calyrsoft.ucbp1.features.profile.presentation.ProfileViewModel
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -87,6 +91,10 @@ val appModule = module {
     single<ILoginRepository>{LoginRepository()}
     factory { LoginUsecase(get()) }
     viewModel { LoginViewModel(get()) }
+
+    single<IProfileRepository>{ ProfileRepository() }
+    factory { loadProfileUseCase(get()) }
+    viewModel { ProfileViewModel(get()) }
 
     single { AppRoomDatabase.getDatabase(get()) }
     single { get<AppRoomDatabase>().dollarDao() }
