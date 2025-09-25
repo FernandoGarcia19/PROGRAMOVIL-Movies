@@ -42,19 +42,17 @@ class DollarViewModel(
     suspend fun getToken(): String = suspendCoroutine { continuation ->
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // Task was successful, get the token
                 val token = task.result
                 if (token != null) {
                     Log.d("FIREBASE", "FCM TOKEN: $token")
                     continuation.resume(token)
                 } else {
-                    // This case should ideally not happen if task.isSuccessful is true
-                    // and result is a non-null String, but good to be safe.
+
                     Log.w("FIREBASE", "Token is null even though task was successful")
                     continuation.resumeWithException(Exception("FCM token was null"))
                 }
             } else {
-                // Task failed, resume with the exception
+
                 Log.w("FIREBASE", "Fetching FCM token failed", task.exception)
                 continuation.resumeWithException(task.exception ?: Exception("Error getting FCM token"))
             }
